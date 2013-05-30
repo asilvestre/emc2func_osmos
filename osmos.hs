@@ -1,9 +1,4 @@
-import Control.Monad
-import Data.Char
 import Data.List
-import Data.Maybe
-import qualified Data.Map as Map
-
 
 main = do
 	numEntries <- getLine
@@ -21,18 +16,18 @@ osmosMain info dat = osmosSolve armin motes
           motes = map read (words dat)
 
 osmosSolve :: Int -> [Int] -> Int
-osmosSolve armin motes = osmosStep (length motes) armin motes
+osmosSolve armin motes = length $ take (length motes) (step armin (sort motes))
 
-osmosStep :: Int -> Int -> [Int] -> Int
-osmosStep max _ [] = 0
-osmosStep max armin (x:xs)
-    | armin > x = let (newArmin, remaining) = consume armin (x:xs) in osmosStep max newArmin remaining
-    | armin <= x = let newSteps = osmosBridge armin x in if length (take max newSteps) < max then length newSteps + osmosStep max (last newSteps) (x:xs) else max
+step :: Int -> [Int] -> [Int]
+step _ [] = []
+step armin (x:xs)
+    | armin > x = let (newArmin, remaining) = consume armin (x:xs) in step newArmin remaining
+    | armin <= x = let nextSteps = bridge armin x in nextSteps ++ step (last nextSteps) (x:xs)
 
-osmosBridge :: Int -> Int -> [Int]
-osmosBridge armin nextMote
+bridge :: Int -> Int -> [Int]
+bridge armin nextMote
     | armin > nextMote = []
-    | armin <= nextMote = let nextArmin = 2 * armin - 1 in nextArmin : osmosBridge (nextArmin) nextMote 
+    | armin <= nextMote = let nextArmin = 2 * armin - 1 in nextArmin : bridge (nextArmin) nextMote 
 
 --Returns the motes not consumed and armin's size
 consume :: Int -> [Int] -> (Int, [Int])
