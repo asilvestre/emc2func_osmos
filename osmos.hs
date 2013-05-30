@@ -29,7 +29,6 @@ bridge armin nextMote
     | armin > nextMote = []
     | armin <= nextMote = let nextArmin = 2 * armin - 1 in nextArmin : bridge (nextArmin) nextMote 
 
---Returns the motes not consumed and armin's size
 consume :: Int -> [Int] -> (Int, [Int])
 consume armin motes = (partialsums !! consumedLen, drop consumedLen motes)
     where partialsums = (scanl (\c x -> c + x) armin motes)
