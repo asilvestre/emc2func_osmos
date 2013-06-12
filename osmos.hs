@@ -10,11 +10,6 @@ processLine i = do
     putStrLn $ "Case #" ++ (show i) ++ ": " ++ (show $ osmosMain info dat)
     processLine (i + 1)
 
-probinfo :: String -> String -> (Int, [Int])
-probinfo info dat = (armin, sort motes)
-    where armin = read (head $ words info)
-          motes = map read (words dat)
-
 osmosMain :: String -> String -> Int
 osmosMain info dat = osmosSolve armin motes
     where armin = read (head $ words info)
