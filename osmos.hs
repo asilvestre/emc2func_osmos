@@ -16,9 +16,9 @@ osmosMain info dat = osmosSolve armin motes
           motes = map read (words dat)
 
 osmosSolve :: Int -> [Int] -> Int
-osmosSolve armin motes = head $ sort (n:solutions)
+osmosSolve armin motes = head $ sort (n: if armin >= 2 then solutions else [])
     where n = length motes
-          solutions = map (\(x, y) -> x + y) $ zip (scanl1 (+) costs) (remainders)
+          solutions = map (\(x, y) -> x + y) $ zip (scanl1 (+) costs) remainders
           costs = map fst steps
           remainders = map snd steps
           steps = step armin (sort motes)
@@ -26,7 +26,6 @@ osmosSolve armin motes = head $ sort (n:solutions)
 step :: Int -> [Int] -> [(Int, Int)]
 step _ [] = []
 step armin (x:xs)
-    | armin < 2 = [(length (x:xs), length (x:xs))]
     | armin > x = let (newArmin, remaining) = consume armin (x:xs)
                   in (0, length remaining) : step newArmin remaining
     | armin <= x = let bridgeSteps = bridge armin x; bridgedArmin = last bridgeSteps; cost = length bridgeSteps
