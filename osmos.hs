@@ -21,14 +21,12 @@ osmosMain info dat = osmosSolve armin motes
           motes = map read (words dat)
 
 osmosSolve :: Int -> [Int] -> Int
-osmosSolve armin motes = min n (last $ takeWhileBetter solutions)
+osmosSolve armin motes = head $ sort (n:solutions)
     where n = length motes
           solutions = map (\(x, y) -> x + y) $ zip (scanl1 (+) costs) (remainders)
           costs = map fst steps
           remainders = map snd steps
           steps = step armin (sort motes)
-          takeWhileBetter (x:y:zs) = if x > y && y < n then y : takeWhileBetter (y:zs) else [x]
-          takeWhileBetter x = x
 
 step :: Int -> [Int] -> [(Int, Int)]
 step _ [] = []
